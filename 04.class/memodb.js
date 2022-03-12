@@ -22,7 +22,7 @@ module.exports= class MemoDB {
 
   index () {
     (async () => {
-      const titles = await this.all_(`SELECT title FROM ${memotable}`);
+      const titles = await this.#all(`SELECT title FROM ${memotable}`);
       titles.forEach((title) => {
         console.log(title);
       });
@@ -32,7 +32,7 @@ module.exports= class MemoDB {
 
   show () {
     (async () => {
-      const titles = await this.all_(`SELECT title FROM ${memotable}`);
+      const titles = await this.#all(`SELECT title FROM ${memotable}`);
       const Enquirer = require('enquirer');
       const question = {
         type: 'select',
@@ -41,7 +41,7 @@ module.exports= class MemoDB {
         choices: titles
       };
       const answer = await Enquirer.prompt(question);
-      const ans = await this.get_(`SELECT content from ${memotable} where title = ?`, [answer.title]);
+      const ans = await this.#get(`SELECT content from ${memotable} where title = ?`, [answer.title]);
       console.log();
       console.log(ans.content);
       this.db.close();
@@ -50,7 +50,7 @@ module.exports= class MemoDB {
 
   delete () {
     (async () => {
-      const titles = await this.all_(`SELECT title FROM ${memotable}`);
+      const titles = await this.#all(`SELECT title FROM ${memotable}`);
       const Enquirer = require('enquirer');
       const question = {
         type: 'select',
@@ -59,7 +59,7 @@ module.exports= class MemoDB {
         choices: titles
       };
       const answer = await Enquirer.prompt(question);
-      await this.delete_(`delete from ${memotable} where title = ?`, answer.title);
+      await this.#delete(`delete from ${memotable} where title = ?`, answer.title);
       this.db.close();
     })();
   }
@@ -68,7 +68,7 @@ module.exports= class MemoDB {
     this.db.close();
   }
 
-  get_ (sql, params) {
+  #get (sql, params) {
     return new Promise((resolve, reject) => {
       this.db.get(sql, params, (err, row) => {
         if (err) reject(err);
@@ -77,7 +77,7 @@ module.exports= class MemoDB {
     });
   }
 
-  all_ (sql) {
+  #all (sql) {
     return new Promise((resolve, reject) => {
       const titles = [];
       this.db.all(sql, (err, rows) => {
@@ -92,7 +92,7 @@ module.exports= class MemoDB {
     });
   }
 
-  delete_ (sql, params) {
+  #delete (sql, params) {
     return new Promise((resolve, reject) => {
       this.db.run(sql, params, (err) => {
         if (err) {
