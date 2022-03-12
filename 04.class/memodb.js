@@ -1,7 +1,7 @@
 
 const sqlite3 = require('sqlite3').verbose();
 const memotable = 'memo';
-module.exports= class MemoDB {
+module.exports = class MemoDB {
   constructor () {
     this.db = new sqlite3.Database('./memo.db');
     this.db.serialize(() => {

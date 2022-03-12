@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 'use strict';
 
-const MemoDB=require('./memodb.js')
+const MemoDB = require('./memodb.js')
 
 const argv = require('argv');
 argv.option({
